@@ -4,7 +4,9 @@ const token=user.getJWTToken()
 
 const options={
     httpOnly:true,
-    expires:new Date(Date.now()+process.env.JWT_COOKIE_EXPIRE*24*60*60*1000)
+    maxAge:process.env.JWT_COOKIE_EXPIRE*24*60*60*1000,
+    sameSite:process.env.NODE_ENV ==="Development"?"lax": "none",
+    secure:process.env.NODE_ENV ==="Development"? false:true
 }
 
 
@@ -16,6 +18,7 @@ const userData = {
     tasks: user.tasks,
     verified: user.verified,
   };
+
 res.status(statusCode).cookie("token",token,options).json({success:true,message,user:userData})
 
 }
